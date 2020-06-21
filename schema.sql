@@ -18,11 +18,11 @@ CREATE TABLE role (
   PRIMARY KEY (id)
 );
 
-CREATE TABLE employee (
-  id INT NOT NULL AUTO_INCREMENT,
-  first_name VARCHAR(30) NOT NULL,
-  last_name VARCHAR(30) DEFAULT '' NOT NULL,
-  role_id INT NULL,
-  manager_id INT NULL,
+CREATE TABLE employees (
+  id INTEGER AUTO_INCREMENT,
+  first_name VARCHAR(30),
+  last_name VARCHAR (30),
+  role_id INTEGER (10),
+  manager_id INTEGER (10) NULL,
   PRIMARY KEY (id)
 );

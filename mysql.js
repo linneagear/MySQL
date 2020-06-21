@@ -34,8 +34,8 @@ function start() {
             message: "What would you like to do?",
             choices: [
                 "View All Employees",
-                "View All Employees By Department",
-                "View All Employees by Role",
+                "View All Departments",
+                "View All Roles",
                 "Add Employee",
                 "Add Department",
                 "Add Role",
@@ -49,11 +49,11 @@ function start() {
                 case "View All Employees":
                     viewEmployees();
                     break;
-                case "View All Employees By Department":
+                case "View All Departments":
                     viewDepartment();
                     break;
 
-                case "View All Employees By Role":
+                case "View All Roles":
                     viewRole();
                     break;
 
@@ -81,8 +81,9 @@ function start() {
 };
 
 function viewEmployees() {
-    var query = "SELECT employee.first_name, employee.last_name, role.title AS \"role\", manager.first_name AS \"manager\" FROM employee LEFT JOIN role ON employee.role_id = role.id LEFT JOIN employee manager ON employee.manager_id = manager.id GROUP BY employee.id"
-
+    var query = "SELECT employees.first_name, employees.last_name, role.title AS \"role\", manager.first_name AS \"manager\" FROM employees LEFT JOIN role ON employees.role_id = role.title LEFT JOIN employees manager ON employees.manager_id = manager.id GROUP BY employees.id"
+    // var query = "SELECT employees.first_name, employees.last_name, role.title FROM employees INNER JOIN role ON employees.role_id = role.title"
+    
     // do a join to gather all relevant information to one table
     connection.query(query, function (err, res) {
         if (err) throw err;
@@ -93,13 +94,24 @@ function viewEmployees() {
 };
 
 function viewDepartment() {
-
+    connection.query("SELECT * FROM department", function (err, res) {
+        if (err) throw err;
+        // Log all results of the SELECT statement
+        console.table(res);
+        start();
+    });
 };
 
 function viewRole() {
-
+    connection.query("SELECT role.title, department.name FROM role LEFT JOIN department ON department.id = role.department_id", function (err, res) {
+        if (err) throw err;
+        // Log all results of the SELECT statement
+        console.table(res);
+        start();
+    });
 };
 
+// last name cannot be null? won't go to the next prompt?
 function addEmployee() {
     inquirer
         .prompt({
@@ -117,28 +129,51 @@ function addEmployee() {
             type: "input",
             message: "What is the employee's role id?",
             choice: [1,2,3]
-        },
-        {
-            name: "manager_id",
-            type: "input",
-            message: "Who is their manager?",
         }
         )
-        .then(function (answer) {
-              // when finished prompting, insert a new item into the db with that info
+        .then (function(answer){
             connection.query(
-            "INSERT INTO employee SET ?", answer, function (err, res) {
+              "INSERT INTO employees SET ?", 
+              {
+                first_name: answer.first_name,
+                last_name: answer.last_name,
+                role_id: answer.role_id
+              },
+              function(err) {
                 if (err) throw err;
-                console.log("Your employee was added created successfully!");
-                // re-prompt the user 
-                start();
-            });
-        });
-}
-
-function addDepartment() {
-
+                console.log( "Employee added!\n");
+        
+                start (); 
+              }
+            );    
+          })
 };
+
+function addDepartment(){
+    inquirer
+    .prompt([
+      {
+        type: "input",
+        name: "deptName", 
+        message: "What Department would you like to add?"
+      }
+    ])
+    .then(function(res){
+      console.log(res);
+      const query = connection.query(
+        "INSERT INTO departments SET ?", 
+        {
+          name: res.deptName
+        }, 
+        function(err, res){
+          connection.query("SELECT * FROM departments", function(err, res){
+            console.table(res); 
+            start(); 
+          })
+        }
+      )
+    })
+  }
 
 function addRole() {
 
