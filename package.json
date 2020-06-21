@@ -1,0 +1,10 @@
+{
+  "name": "mysql",
+  "version": "1.0.0",
+  "description": "homework json for mysql",
+  "main": "mysql.js",
+  "dependencies": {
+    "inquirer": "^6.5.2",
+    "mysql": "^2.16.0"
+  }
+}
