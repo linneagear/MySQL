@@ -68,4 +68,37 @@ function start() {
         connection.end();
       }
     });
+};
+
+function viewEmployees() {
+    connection.query("SELECT * FROM employee", function(err, res) {
+        if (err) throw err;
+        console.log(res);
+        start();
+})
+};
+
+function viewDepartment() {
+
+};
+
+function viewRole() {
+
+};
+
+function addEmployee() {
+
 }
+
+function addDepartment() {
+
+};
+
+function addRole() {
+
+};
+
+function updateRole() {
+
+};
+
