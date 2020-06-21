@@ -113,40 +113,50 @@ function viewRole() {
 
 // last name cannot be null? won't go to the next prompt?
 function addEmployee() {
+    // let employeeList = [];
+    // connection.query("SELECT * FROM employees", function(err,res){
+    //   if(err) throw err;
+
+    //   for (let i=0; i <res.length; i++){
+    //     employeeList.push(
+    //         {
+    //         first_name: res[i].first_name, 
+    //         last_name: res[i].last_name,
+    //         role_id: res[i].role_id,
+    //         manager_id: res[i].manager_id
+    //     })
+    //   }
+
     inquirer
         .prompt({
-            name: "first_name",
+            name: "firstName",
             type: "input",
             message: "What is the employee's first name?",
         },
         {
-           name: "last_name",
-            type: "input",
-            message: "What is the employee's last name?",
+           name: "lastName",
+           type: "input",
+           message: "What is the employee's last name?",
         },
         {
-            name: "role_id",
-            type: "input",
+            name: "roleID",
+            type: "list",
             message: "What is the employee's role id?",
             choice: [1,2,3]
-        }
-        )
-        .then (function(answer){
-            connection.query(
-              "INSERT INTO employees SET ?", 
-              {
-                first_name: answer.first_name,
-                last_name: answer.last_name,
-                role_id: answer.role_id
-              },
-              function(err) {
+        },
+        {
+            name: "managerID",
+            type: "list",
+            message: "What is the employee's manager id?",
+            choice: [1,2,3]
+        })
+        .then(function(res) {
+            connection.query('INSERT INTO employees (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)', [res.firstName, res.lastName, res.roleID, res.managerID], function(err, data) {
                 if (err) throw err;
-                console.log( "Employee added!\n");
-        
-                start (); 
-              }
-            );    
-          })
+                console.table("Successfully Inserted");
+                start();
+            })
+        })
 };
 
 function addDepartment(){
@@ -227,6 +237,23 @@ function addRole() {
 };
 
 function updateRole() {
-
+    inquirer.prompt([
+        {
+            name: "name",
+            type: "input",
+            message: "which employee would you like to update? (use first name only for now)",
+        }, 
+        {
+            name: "role_id",
+            type: "number",
+            message: "Enter the new role ID: "
+        }
+    ]).then(function (answer) {
+        connection.query("UPDATE employees SET role_id = ? WHERE first_name = ?", [answer.role_id, answer.name], function (err, res) {
+            if (err) throw err;
+            console.table(res);
+            start();
+        })
+    })
 };
 
