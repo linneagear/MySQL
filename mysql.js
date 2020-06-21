@@ -81,7 +81,7 @@ function start() {
 };
 
 function viewEmployees() {
-    var query = "SELECT employees.first_name, employees.last_name, role.title AS \"role\", manager.first_name AS \"manager\" FROM employees LEFT JOIN role ON employees.role_id = role.title LEFT JOIN employees manager ON employees.manager_id = manager.id GROUP BY employees.id"
+    var query = "SELECT employees.first_name, employees.last_name, role.title AS \"role\", manager.first_name AS \"manager\" FROM employees LEFT JOIN role ON employees.role_id = role.id LEFT JOIN employees manager ON employees.manager_id = manager.id GROUP BY employees.id";
     // var query = "SELECT employees.first_name, employees.last_name, role.title FROM employees INNER JOIN role ON employees.role_id = role.title"
     
     // do a join to gather all relevant information to one table
@@ -103,7 +103,7 @@ function viewDepartment() {
 };
 
 function viewRole() {
-    connection.query("SELECT role.title, department.name FROM role LEFT JOIN department ON department.id = role.department_id", function (err, res) {
+    connection.query("SELECT role.*, department.name FROM role LEFT JOIN department ON department.id = role.department_id", function (err, res) {
         if (err) throw err;
         // Log all results of the SELECT statement
         console.table(res);
