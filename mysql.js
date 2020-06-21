@@ -177,7 +177,53 @@ function addDepartment(){
   }
 
 function addRole() {
+    // to add the role to a specific department start with an empty array
+    let department = [];
+    connection.query("SELECT * FROM department", function(err,res){
+      if(err) throw err;
 
+      for (let i=0; i <res.length; i++){
+        department.push({name: res[i].name, value: res[i].id});
+      }
+    
+    inquirer
+    .prompt([
+      {
+        type: "input",
+        name: "roleName", 
+        message: "What role would you like to add?"
+      },
+      {
+        type: "input",
+        name: "newSalary", 
+        message: "What will that role's salary be?"
+      },
+      {
+        type: "list",
+        name: "department",
+        message: "What department?",
+        choices: department
+      }
+    ])
+    .then(function(res){
+      console.log(res);
+      const query = connection.query(
+        //   once added, add to department table
+        "INSERT INTO role SET ?", 
+        {
+          title: res.roleName,
+          salary: res.newSalary,
+          department_id: res.department
+        }, 
+        function(err, res){
+          connection.query("SELECT * FROM role", function(err, res){
+            console.table(`This role has been added.`); 
+            start(); 
+          })
+        }
+      )
+    })
+  });
 };
 
 function updateRole() {
