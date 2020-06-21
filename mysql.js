@@ -70,7 +70,7 @@ function start() {
                     break;
 
                 case "Update Employee Role":
-                    addRole();
+                    updateRole();
                     break;
 
                 case "Exit":
@@ -161,13 +161,14 @@ function addDepartment(){
     .then(function(res){
       console.log(res);
       const query = connection.query(
-        "INSERT INTO departments SET ?", 
+        //   once added, add to department table
+        "INSERT INTO department SET ?", 
         {
           name: res.deptName
         }, 
         function(err, res){
-          connection.query("SELECT * FROM departments", function(err, res){
-            console.table(res); 
+          connection.query("SELECT * FROM department", function(err, res){
+            console.table(`This department has been added.`); 
             start(); 
           })
         }
