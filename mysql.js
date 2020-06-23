@@ -128,7 +128,8 @@ function addEmployee() {
     //   }
 
     inquirer
-        .prompt({
+        .prompt([
+          {
             name: "firstName",
             type: "input",
             message: "What is the employee's first name?",
@@ -142,16 +143,18 @@ function addEmployee() {
             name: "roleID",
             type: "list",
             message: "What is the employee's role id?",
-            choice: [1,2,3]
+            choices: [1,2,3]
         },
         {
             name: "managerID",
             type: "list",
             message: "What is the employee's manager id?",
-            choice: [1,2,3]
-        })
+            choices: [1,2,3]
+        }
+      ])
         .then(function(res) {
-            connection.query('INSERT INTO employees (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)', [res.firstName, res.lastName, res.roleID, res.managerID], function(err, data) {
+          console.log(res.firstName);
+            connection.query("INSERT INTO employees (first_name, test, role_id, manager_id) VALUES (?, ?, ?, ?)", [res.firstName, res.lastName, res.roleID, res.managerID], function(err, data) {
                 if (err) throw err;
                 console.table("Successfully Inserted");
                 start();
