@@ -19,9 +19,9 @@ CREATE TABLE role (
 );
 
 CREATE TABLE employees (
-    id INT AUTO_INCREMENT NOT NULL,
-    first_name VARCHAR(30) NULL,
-    last_name VARCHAR(30) NULL,
+    id INT NOT NULL AUTO_INCREMENT,
+    first_name VARCHAR(30) NOT NULL,
+    last_name VARCHAR(30) NOT NULL,
     role_id INT(10),
     manager_id INT(10) NULL
 );
