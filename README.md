@@ -48,7 +48,7 @@ This app runs as a Node CLI to gather information about each employee, so once i
 
 ## Video Example
 
-[Click this link to see a video example of the working application]()
+[Click this link to see a video example of the working application](https://youtu.be/6E8p8h-UnjU)
 
 ## Issues
 The hardest part I had with this app was using join to join my tables together. I wasn't able to get the Update role to function due to this.
