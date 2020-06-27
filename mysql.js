@@ -14,7 +14,7 @@ var connection = mysql.createConnection({
   user: "root",
 
   // Your password
-  password: "@Aries17445!",
+  password: "",
   database: "employee_DB"
 });
 
@@ -255,7 +255,7 @@ function updateRole() {
     }
   ]).then(function (res) {
 
-    connection.query("UPDATE employees SET role_id= ? WHERE first_name= ?", [res.role, res.name], function (err, res) {
+    connection.query("UPDATE employees SET first_name= ? WHERE role_id= ?", [res.name, res.id], function (err, res) {
       if (err) return err;
 
       console.table(res);
